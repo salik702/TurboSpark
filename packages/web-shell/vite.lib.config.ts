@@ -1,0 +1,76 @@
+import { defineConfig, type Plugin } from 'vite';
+import react from '@vitejs/plugin-react';
+import pkg from './package.json' with { type: 'json' };
+
+function injectCssModules(): Plugin {
+  return {
+    name: 'inject-web-shell-css-modules',
+    enforce: 'post',
+    generateBundle(_options, bundle) {
+      const css = Object.entries(bundle)
+        .filter(
+          ([, item]) => item.type === 'asset' && item.fileName.endsWith('.css'),
+        )
+        .map(([fileName, item]) => {
+          delete bundle[fileName];
+          return typeof item.source === 'string'
+            ? item.source
+            : Buffer.from(item.source).toString('utf8');
+        })
+        .join('\n');
+      if (!css) return;
+      const escapedCss = JSON.stringify(css);
+      for (const item of Object.values(bundle)) {
+        if (item.type !== 'chunk') continue;
+        if (
+          !item.isEntry &&
+          !item.facadeModuleId?.endsWith('/client/index.tsx')
+        ) {
+          continue;
+        }
+        item.code =
+          `const __turbosparkWebShellCss=${escapedCss};\n` +
+          `if(typeof document!=="undefined"&&!document.querySelector('style[data-turbospark-web-shell="component"]')){` +
+          `const s=document.createElement("style");s.dataset.turbosparkWebShell="component";s.textContent=__turbosparkWebShellCss;try{document.head.appendChild(s);}catch(e){console.warn("[turbospark-web-shell] CSS injection blocked by CSP:",e);}}\n` +
+          item.code;
+      }
+    },
+  };
+}
+
+export default defineConfig({
+  plugins: [react(), injectCssModules()],
+  build: {
+    emptyOutDir: false,
+    lib: {
+      entry: 'client/index.tsx',
+      formats: ['es'],
+      fileName: () => 'index.js',
+    },
+    rollupOptions: {
+      external: [
+        'react',
+        'react/jsx-runtime',
+        'react-dom',
+        'react-dom/client',
+        '@turbospark/sdk',
+        /^@turbospark\/sdk\//,
+        '@turbospark/webui',
+        /^@turbospark\/webui\//,
+        'react-markdown',
+        'remark-gfm',
+        'remark-math',
+        'rehype-katex',
+        'shiki',
+        'mermaid',
+        'katex',
+        /^katex\//,
+        'codemirror',
+        /^@codemirror\//,
+      ],
+    },
+  },
+  define: {
+    __WEB_SHELL_VERSION__: JSON.stringify(pkg.version),
+  },
+});

@@ -1,0 +1,160 @@
+# Environment files
+.env
+.env~
+.env.local
+.env.*.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Node/npm
+node_modules/
+bower_components/
+package-lock.json
+.pnp
+.pnp.js
+
+# Package manager lockfiles
+# yarn.lock
+# pnpm-lock.yaml
+
+# Build outputs
+*.tsbuildinfo
+**/dist/
+**/build/
+**/out/
+**/bundle/
+
+# Docker
+.docker/
+
+# Bundles
+packages/vscode-ide-companion/*.vsix
+
+# Generated files
+packages/cli/src/generated/
+packages/core/src/generated/
+packages/web-templates/src/generated/
+.integration-tests/
+
+# Test reports and coverage
+junit.xml
+coverage/
+packages/*/coverage/
+*.lcov
+.nyc_output/
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+patch_output.log
+*storybook.log
+
+# Editors and IDEs
+.idea/
+*.iml
+*.iws
+*.ipr
+.cursor/
+.qoder/
+.claude/
+.codex/
+.vscode/*
+!.vscode/extensions.json
+!.vscode/launch.json
+!.vscode/tasks.json
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# OS metadata
+.DS_Store
+**/.DS_Store
+Thumbs.db
+Desktop.ini
+ehthumbs.db
+
+# Docs build
+docs-site/.next/
+# content is a symlink to ../docs
+docs-site/content
+
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.venv/
+venv/
+ENV/
+env/
+.tox/
+.nox/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+pip-wheel-metadata/
+*.egg-info/
+
+# Java and Maven
+target/
+*.class
+*.jar
+*.war
+*.ear
+.factorypath
+
+# Other test / temporary outputs
+integration-tests/concurrent-runner/output/
+integration-tests/concurrent-runner/task-*
+integration-tests/terminal-capture/scenarios/screenshots/
+packages/core/src/utils/filesearch/fzfWorker.js
+storybook-static/
+packages/core/src/skills/bundled/qc-helper/docs
+tmp/
+.temp/
+*.tmp
+*.temp
+.codegraph/
+
+# Project-specific caches and local run data
+.turbospark/*
+!.turbospark/design/
+!.turbospark/e2e-tests/
+!.turbospark/issues/
+!.turbospark/pr-drafts/
+!.turbospark/pr-reviews/
+!.turbospark/investigations/
+!.turbospark/scripts/
+!.turbospark/plans/
+!.turbospark/agents/
+!.turbospark/skills/
+!.turbospark/skills/**
+.turbospark/skills/auto-skill-*/
+!.turbospark/specs/
+
+# Gemini/Qwen settings
+**/.gemini/
+!/.gemini/
+.gemini/*
+!.gemini/config.yaml
+!.gemini/commands/
+
+.qwen/*
+!.qwen/commands/
+!.qwen/commands/**
+!.qwen/skills/
+!.qwen/skills/**
+.qwen/skills/auto-skill-*/
+!.qwen/agents/
+!.qwen/agents/**
+.qwen/computer-use/installed.json
+
