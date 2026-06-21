@@ -169,7 +169,7 @@ Full license text: [apache.org/licenses/LICENSE-2.0](http://www.apache.org/licen
 
 <img src="https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/rainbow.png" width="100%"/>
 
-## 📧 Connect
+## 📧Lets Connect
 
 <div align="center">
 
