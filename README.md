@@ -16,7 +16,7 @@
 <div align="center">
 
 <!-- 📸 Add your CLI screenshot below — replace the path with your actual image -->
-<img width="947" height="487" alt="image" src="https://github.com/user-attachments/assets/f1696bce-3446-439c-96a2-f747c63d8c66" />
+<img width="947" height="487" alt="image" src="https://github.com/user-attachments/assets/c4b8d3cc-9f44-407d-99b8-146db0b31bab" />
 
 
 </div>
@@ -167,8 +167,37 @@ Full license text: [apache.org/licenses/LICENSE-2.0](http://www.apache.org/licen
 
 ---
 
+<img src="https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/rainbow.png" width="100%"/>
+
+## 📧 Connect
+
 <div align="center">
 
-**Built for developers who live in the terminal.** ⚡
+<h3>Built with obsession by <b>Salik Ahmad</b> ⚡</h3>
+
+<p>
+  <a href="https://salikahmad.vercel.app/" target="_blank">
+    <img src="https://img.shields.io/badge/Website-salikahmad.vercel.app-ef4444?style=for-the-badge&logo=vercel&logoColor=white&labelColor=0d0d0d" />
+  </a>
+  <a href="https://www.linkedin.com/in/salik-ahmad-programmer/" target="_blank">
+    <img src="https://img.shields.io/badge/LinkedIn-Salik%20Ahmad-0A66C2?style=for-the-badge&logo=linkedin&logoColor=white&labelColor=0d0d0d" />
+  </a>
+  <a href="https://www.kaggle.com/salikahmad702" target="_blank">
+    <img src="https://img.shields.io/badge/Kaggle-salikahmad702-20BEFF?style=for-the-badge&logo=kaggle&logoColor=white&labelColor=0d0d0d" />
+  </a>
+  <a href="https://github.com/salik702" target="_blank">
+    <img src="https://img.shields.io/badge/GitHub-salik702-181717?style=for-the-badge&logo=github&logoColor=white&labelColor=0d0d0d" />
+  </a>
+</p>
+
+<br/>
+
+<a href="https://salikahmad.vercel.app/">
+  <img src="https://readme-typing-svg.herokuapp.com?font=JetBrains+Mono&size=14&duration=4000&pause=1000&color=EF4444&center=true&vCenter=true&width=700&lines=AI%2FML+Engineer;Copyright+©+2026+Salik+Ahmad.+All+rights+reserved." alt="Footer Typing" />
+</a>
+
+<br/><br/>
+
+<img src="https://capsule-render.vercel.app/api?type=shark&color=0:0d0d0d,50:1a0000,100:0d0d0d&height=140&section=footer" width="100%"/>
 
 </div>
