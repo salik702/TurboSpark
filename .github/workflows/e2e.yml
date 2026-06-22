@@ -74,6 +74,7 @@ jobs:
             exit 1
           fi
           node -e "console.log('CLI bundle size:', require('fs').statSync('dist/cli.js').size, 'bytes')"
+          node -e "console.log('Node:', process.version, '| npm:', process.env.npm_config_user_agent || 'N/A', '| arch:', process.arch)"
 
       - name: 'Set up Docker'
         if: |-
@@ -97,6 +98,15 @@ jobs:
           KEEP_OUTPUT: 'true'
           VERBOSE: 'true'
         run: |-
+          # Verify API configuration
+          if [[ -z "$OPENAI_API_KEY" ]]; then
+            echo '::warning::OPENAI_API_KEY is not set — tests requiring API access will fail'
+          fi
+          if [[ -z "$OPENAI_BASE_URL" ]]; then
+            echo '::warning::OPENAI_BASE_URL is not set — using default endpoint'
+          fi
+          echo "OPENAI_BASE_URL=${OPENAI_BASE_URL:-'(not set)'}"
+          echo "OPENAI_MODEL=${OPENAI_MODEL:-'(not set)'}"
           if [[ "${{ matrix.sandbox }}" == "sandbox:docker" ]]; then
             npm run test:integration:sandbox:docker
           else
@@ -148,10 +158,21 @@ jobs:
             exit 1
           fi
           node -e "console.log('CLI bundle size:', require('fs').statSync('dist/cli.js').size, 'bytes')"
+          node -e "console.log('Node:', process.version, '| npm:', process.env.npm_config_user_agent || 'N/A', '| arch:', process.arch)"
 
       - name: 'Run E2E tests'
         env:
           OPENAI_API_KEY: '${{ secrets.OPENAI_API_KEY }}'
           OPENAI_BASE_URL: '${{ secrets.OPENAI_BASE_URL }}'
           OPENAI_MODEL: '${{ secrets.OPENAI_MODEL }}'
-        run: 'npm run test:e2e'
+        run: |-
+          # Verify API configuration
+          if [[ -z "$OPENAI_API_KEY" ]]; then
+            echo '::warning::OPENAI_API_KEY is not set — tests requiring API access will fail'
+          fi
+          if [[ -z "$OPENAI_BASE_URL" ]]; then
+            echo '::warning::OPENAI_BASE_URL is not set — using default endpoint'
+          fi
+          echo "OPENAI_BASE_URL=${OPENAI_BASE_URL:-'(not set)'}"
+          echo "OPENAI_MODEL=${OPENAI_MODEL:-'(not set)'}"
+          npm run test:e2e
