@@ -64,10 +64,7 @@ patch_output.log
 .qoder/
 .claude/
 .codex/
-.vscode/*
-!.vscode/extensions.json
-!.vscode/launch.json
-!.vscode/tasks.json
+.vscode/
 *.suo
 *.ntvs*
 *.njsproj
