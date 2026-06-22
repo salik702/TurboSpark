@@ -360,13 +360,13 @@ describe('Model-specific tool call formats', () => {
     expect(prompt).toMatchSnapshot();
   });
 
-  it('should use bracket format for generic models', () => {
+  it('should use descriptive format for generic models', () => {
     vi.mocked(isGitRepository).mockReturnValue(false);
     const prompt = getCoreSystemPrompt(undefined, 'gpt-4');
 
-    // Should contain bracket-style tool calls
-    expect(prompt).toContain('[tool_call: run_shell_command for');
-    expect(prompt).toContain('because it must run in the background]');
+    // Should contain descriptive tool call references (not raw syntax)
+    expect(prompt).toContain('(uses the run_shell_command tool');
+    expect(prompt).toContain('is_background: true');
 
     // Should NOT contain XML-style tool calls
     expect(prompt).not.toContain('<function=run_shell_command>');
@@ -378,13 +378,13 @@ describe('Model-specific tool call formats', () => {
     expect(prompt).toMatchSnapshot();
   });
 
-  it('should use bracket format when no model is specified', () => {
+  it('should use descriptive format when no model is specified', () => {
     vi.mocked(isGitRepository).mockReturnValue(false);
     const prompt = getCoreSystemPrompt();
 
-    // Should contain bracket-style tool calls (default behavior)
-    expect(prompt).toContain('[tool_call: run_shell_command for');
-    expect(prompt).toContain('because it must run in the background]');
+    // Should contain descriptive tool call references (default behavior)
+    expect(prompt).toContain('(uses the run_shell_command tool');
+    expect(prompt).toContain('is_background: true');
 
     // Should NOT contain XML or JSON formats
     expect(prompt).not.toContain('<function=run_shell_command>');
