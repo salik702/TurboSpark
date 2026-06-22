@@ -23,6 +23,7 @@ jobs:
   e2e-test-linux:
     name: 'E2E Test (Linux) - ${{ matrix.sandbox }}'
     runs-on: 'ubuntu-latest'
+    timeout-minutes: 45
     # Skip on fork PRs: forks have no access to repository secrets
     # (OPENAI_*, DOCKERHUB_*), so the matrix would fail unconditionally
     # and show misleading red status. Same-repo PRs run normally.
@@ -66,6 +67,14 @@ jobs:
         run: |-
           npm run bundle
 
+      - name: 'Verify CLI bundle'
+        run: |-
+          if [[ ! -f dist/cli.js ]]; then
+            echo '::error::dist/cli.js not found after bundle step'
+            exit 1
+          fi
+          node -e "console.log('CLI bundle size:', require('fs').statSync('dist/cli.js').size, 'bytes')"
+
       - name: 'Set up Docker'
         if: |-
           ${{ matrix.sandbox == 'sandbox:docker' }}
@@ -97,6 +106,7 @@ jobs:
   e2e-test-macos:
     name: 'E2E Test - macOS'
     runs-on: 'macos-latest'
+    timeout-minutes: 45
     # Skip on fork PRs (no secrets) — see e2e-test-linux above.
     if: |-
       ${{ github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository }}
@@ -130,6 +140,14 @@ jobs:
       - name: 'Bundle CLI for E2E tests'
         run: |-
           npm run bundle
+
+      - name: 'Verify CLI bundle'
+        run: |-
+          if [[ ! -f dist/cli.js ]]; then
+            echo '::error::dist/cli.js not found after bundle step'
+            exit 1
+          fi
+          node -e "console.log('CLI bundle size:', require('fs').statSync('dist/cli.js').size, 'bytes')"
 
       - name: 'Run E2E tests'
         env:

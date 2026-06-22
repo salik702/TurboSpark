@@ -19,7 +19,7 @@ ENV PATH=$PATH:/usr/local/share/npm-global/bin
 COPY . /home/node/app
 WORKDIR /home/node/app
 
-# Install dependencies, build workspaces, bundle into a single distributable, and pack
+# Install dependencies (prepare hook is skipped in CI), then build, bundle, and pack
 RUN npm ci \
   && npm run build \
   && npm run bundle \

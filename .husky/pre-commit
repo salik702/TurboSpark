@@ -1,3 +1,10 @@
+#!/usr/bin/env sh
+
+# Fix PATH on Windows Git Bash: npm is a .cmd wrapper in the same
+# directory as node.exe, but bash can't resolve it without the directory
+# in PATH. This one-liner prepends the Node.js bin dir cross-platform.
+PATH="$(node -e "process.stdout.write(require('path').dirname(process.execPath))"):$PATH"
+
 npm run pre-commit || {
   echo ''
   echo '===================================================='

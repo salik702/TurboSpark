@@ -38,6 +38,12 @@ const argv = yargs(hideBin(process.argv))
     default: false,
     description: 'skip npm install + npm run build',
   })
+  .option('skip-host-build', {
+    type: 'boolean',
+    default: false,
+    description:
+      'skip host-side build/bundle/prepare:package (already done by CI workflow), but still create the npm tarball for Docker',
+  })
   .option('f', {
     alias: 'dockerfile',
     type: 'string',
@@ -80,29 +86,42 @@ const image = argv.i;
 const dockerFile = argv.f;
 
 if (!image.length) {
-  console.warn(
-    'No default image tag specified in packages/cli/package.json',
-  );
+  console.warn('No default image tag specified in packages/cli/package.json');
 }
 
 if (!argv.s) {
-  execSync('npm install', { stdio: 'inherit' });
-  execSync('npm run build', { stdio: 'inherit' });
-
-  console.log('bundling...');
-  execSync('npm run bundle', { stdio: 'inherit' });
-
-  console.log('preparing package...');
-  execSync('npm run prepare:package', { stdio: 'inherit' });
-
-  console.log('packing...');
-  const distDir = join(process.cwd(), 'dist');
-  for (const f of readdirSync(distDir)) {
-    if (f.endsWith('.tgz')) {
-      rmSync(join(distDir, f), { force: true });
+  if (argv.skipHostBuild) {
+    // Host-side build/bundle already done by CI workflow.
+    // Only need npm pack to create the tarball for the Dockerfile.
+    console.log(
+      'skipping host-side build (already done by CI), creating tarball only...',
+    );
+    const distDir = join(process.cwd(), 'dist');
+    for (const f of readdirSync(distDir)) {
+      if (f.endsWith('.tgz')) {
+        rmSync(join(distDir, f), { force: true });
+      }
     }
+    execSync('npm pack', { stdio: 'ignore', cwd: distDir });
+  } else {
+    execSync('npm install', { stdio: 'inherit' });
+    execSync('npm run build', { stdio: 'inherit' });
+
+    console.log('bundling...');
+    execSync('npm run bundle', { stdio: 'inherit' });
+
+    console.log('preparing package...');
+    execSync('npm run prepare:package', { stdio: 'inherit' });
+
+    console.log('packing...');
+    const distDir = join(process.cwd(), 'dist');
+    for (const f of readdirSync(distDir)) {
+      if (f.endsWith('.tgz')) {
+        rmSync(join(distDir, f), { force: true });
+      }
+    }
+    execSync('npm pack', { stdio: 'ignore', cwd: distDir });
   }
-  execSync('npm pack', { stdio: 'ignore', cwd: distDir });
 }
 
 const buildStdout = process.env.VERBOSE ? 'inherit' : 'ignore';
@@ -135,7 +154,9 @@ function buildImage(imageName, dockerfile) {
   ).version;
 
   const imageTag =
-    process.env.TURBOSPARK_SANDBOX_IMAGE_TAG || imageName.split(':')[1] || 'latest';
+    process.env.TURBOSPARK_SANDBOX_IMAGE_TAG ||
+    imageName.split(':')[1] ||
+    'latest';
   const finalImageName = `${imageName.split(':')[0]}:${imageTag}`;
 
   try {
