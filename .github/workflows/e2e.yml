@@ -1,11 +1,11 @@
 name: 'E2E Tests'
 
+# Disabled: E2E tests require API secrets not available on forks.
+# Re-enable by restoring 'push' and 'merge_group' triggers below
+# and adding GEMINI_API_KEY (and other required secrets) to your
+# repository's Settings → Secrets → Actions.
 on:
-  push:
-    branches:
-      - 'main'
-      - 'feat/e2e/**'
-  merge_group:
+  workflow_dispatch:
 
 concurrency:
   # Key on the head ref so a `push` to a `feat/e2e/**` branch and a
