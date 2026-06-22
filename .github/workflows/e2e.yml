@@ -24,9 +24,9 @@ jobs:
     name: 'E2E Test (Linux) - ${{ matrix.sandbox }}'
     runs-on: 'ubuntu-latest'
     timeout-minutes: 45
-    # Skip on fork PRs: forks have no access to repository secrets
-    # (OPENAI_*, DOCKERHUB_*), so the matrix would fail unconditionally
-    # and show misleading red status. Same-repo PRs run normally.
+    # Skip on fork PRs: forks have no access to repository secrets,
+    # so the matrix would fail unconditionally and show misleading
+    # red status. Same-repo PRs run normally.
     if: |-
       ${{ github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository }}
     strategy:
@@ -92,21 +92,9 @@ jobs:
 
       - name: 'Run E2E tests'
         env:
-          OPENAI_API_KEY: '${{ secrets.OPENAI_API_KEY }}'
-          OPENAI_BASE_URL: '${{ secrets.OPENAI_BASE_URL }}'
-          OPENAI_MODEL: '${{ secrets.OPENAI_MODEL }}'
           KEEP_OUTPUT: 'true'
           VERBOSE: 'true'
         run: |-
-          # Verify API configuration
-          if [[ -z "$OPENAI_API_KEY" ]]; then
-            echo '::warning::OPENAI_API_KEY is not set — tests requiring API access will fail'
-          fi
-          if [[ -z "$OPENAI_BASE_URL" ]]; then
-            echo '::warning::OPENAI_BASE_URL is not set — using default endpoint'
-          fi
-          echo "OPENAI_BASE_URL=${OPENAI_BASE_URL:-'(not set)'}"
-          echo "OPENAI_MODEL=${OPENAI_MODEL:-'(not set)'}"
           if [[ "${{ matrix.sandbox }}" == "sandbox:docker" ]]; then
             npm run test:integration:sandbox:docker
           else
@@ -161,18 +149,4 @@ jobs:
           node -e "console.log('Node:', process.version, '| npm:', process.env.npm_config_user_agent || 'N/A', '| arch:', process.arch)"
 
       - name: 'Run E2E tests'
-        env:
-          OPENAI_API_KEY: '${{ secrets.OPENAI_API_KEY }}'
-          OPENAI_BASE_URL: '${{ secrets.OPENAI_BASE_URL }}'
-          OPENAI_MODEL: '${{ secrets.OPENAI_MODEL }}'
-        run: |-
-          # Verify API configuration
-          if [[ -z "$OPENAI_API_KEY" ]]; then
-            echo '::warning::OPENAI_API_KEY is not set — tests requiring API access will fail'
-          fi
-          if [[ -z "$OPENAI_BASE_URL" ]]; then
-            echo '::warning::OPENAI_BASE_URL is not set — using default endpoint'
-          fi
-          echo "OPENAI_BASE_URL=${OPENAI_BASE_URL:-'(not set)'}"
-          echo "OPENAI_MODEL=${OPENAI_MODEL:-'(not set)'}"
-          npm run test:e2e
+        run: 'npm run test:e2e'
